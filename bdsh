@@ -66,7 +66,7 @@ create () {
 }
 
 describe () {
-    sed -n '/desc_'$4'/,/],/p' "$2" | head -n -1 |  tail -n +2 | tr -d '"' | tr -d " "
+    sed -n '/desc_'$4'/,/]/p' "$2" | head -n -1 |  tail -n +2 | tr -d '",' | tr -d " "
 }
 
 main () {
