@@ -31,15 +31,34 @@ create () {
         echo "  -j                json formated output for select command"
         exit 1
     elif [ "$4" = "table" ];then
-        if [ -z "$6" ];then
-            sed '2 i\  "desc_'$5'": [\n  ]' "$2"
+        grep -q "desc_"$5"" "$2"
+        if [ $? = 0 ];then
+            echo "Usage: ./bdsh [OPTION]... [COMMAND] [REQUEST]"
+            echo "OPTION:"
+            echo "  -h				display usage"
+            echo "  -f FILE			json database file"
+            echo "  -j                json formated output for select command"
+            exit 1
+        elif [ -z "$6" ];then
+            grep -q "desc" "$2"
+            if [ $? = 0 ]; then
+                sed -i '2 i\  "desc_'$5'": [\n  ],' "$2"
+            else
+                sed -i '2 i\  "desc_'$5'": [\n  ]' "$2"
+            fi
         else
-            var=`echo "$6" | sed "s/,/\",\n\"/g"`
-            sed '2 i\  "desc_'$5'": [\n  "'$var'"\n  ]' "$2"
+            grep -q "desc" "$2"
+            if [ $? = 0 ]; then
+                var=`echo "$6" | sed "s/,/\",\"/g"`
+                sed -i '2 i\  "desc_'$5'": [\n  "'$var'"\n  ],' "$2"
+            else
+                var=`echo "$6" | sed "s/,/\",\"/g"`
+                sed -i '2 i\  "desc_'$5'": [\n  "'$var'"\n  ]' "$2"
+            fi
         fi
     else
         touch "$2"
-        echo "{" > "$2"  
+        echo "{" > "$2"
         echo "}" >> "$2"
     fi
 }
@@ -60,6 +79,3 @@ main () {
 }
 
 main "$@"
-
-####ERRORS
-##PAS DE '=' ENTRE LE NOM ET LA VALEUR DE CHAQUE VARIABLE
