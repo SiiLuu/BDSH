@@ -49,11 +49,13 @@ create () {
         else
             grep -q "desc" "$2"
             if [ $? = 0 ]; then
-                var=`echo "$6" | sed "s/,/\",\"/g"`
-                sed -i '2 i\  "desc_'$5'": [\n  "'$var'"\n  ],' "$2"
+                var=`echo "$6" | sed "s/,/\",~\"/g"`
+                sed -i '2 i\  "desc_'$5'": [\n    "'$var'"\n  ],' "$2"
+                cat "$2"  | sed -i "s/~/\n    /g" "$2"
             else
-                var=`echo "$6" | sed "s/,/\",\"/g"`
-                sed -i '2 i\  "desc_'$5'": [\n  "'$var'"\n  ]' "$2"
+                var=`echo "$6" | sed "s/,/\",~\"/g"`
+                sed -i '2 i\  "desc_'$5'": [\n    "'$var'"\n  ]' "$2"
+                cat "$2"  | sed -i "s/~/\n    /g" "$2"
             fi
         fi
     else
