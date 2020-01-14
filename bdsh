@@ -30,9 +30,23 @@ create () {
         echo "  -f FILE			json database file"
         echo "  -j                json formated output for select command"
         exit 1
+    elif [ "$4" = "table" ];then
+        if [ -z "$6" ];then
+            sed '2 i\  "desc_'$5'": [\n  ]' "$2"
+        else
+            var=`echo "$6" | sed "s/,/\",\n\"/g"`
+            sed '2 i\  "desc_'$5'": [\n  "'$var'"\n  ]' "$2"
+        fi
     else
         touch "$2"
+        echo "{" > "$2"  
+        echo "}" >> "$2"
     fi
+}
+
+describe () {
+    #On va récupérer desc_"$4"
+    grep -o "desc_user" "$2"
 }
 
 main () {
@@ -49,5 +63,4 @@ main () {
 main "$@"
 
 ####ERRORS
-##REGARDER QUE DESC_$TABLE ET DATA_$TABLE EXISTENT
 ##PAS DE '=' ENTRE LE NOM ET LA VALEUR DE CHAQUE VARIABLE
