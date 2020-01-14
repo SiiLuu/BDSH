@@ -45,8 +45,7 @@ create () {
 }
 
 describe () {
-    #On va récupérer desc_"$4"
-    grep -o "desc_user" "$2"
+    sed -n '/desc_'$4'/,/],/p' "$2" | head -n -1 |  tail -n +2 | tr -d '"' | tr -d " "
 }
 
 main () {
